@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <editline/readline.h>
 #include <editline/history.h>
 
@@ -15,6 +16,7 @@ int main(int argc, char** argv) {
     int result = eval(input);
 
     printf("=> %d\n", result);
+    free(input);
   }
 
   return 0;
