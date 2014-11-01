@@ -3,21 +3,22 @@
 #include <errno.h>
 
 #include "cbehave.h"
+#include "lispy.h"
 
 
-FEATURE(1, "strstr")
-  SCENARIO("The strstr finds the first occurrence of the substring in the source string")
+FEATURE(1, "Expression evaluation")
+  SCENARIO("Lispy can answer the ultimate question")
 
-     GIVEN("A source string: [Lionel Messi is a great football player]")
-         char *str = "Lionel Messi is a great football player";
+     GIVEN("The ultimate question")
+         char *expr = "What is the Ultimate Answer of Life, The Universe and Everything?";
      GIVEN_END
 
-     WHEN("we use strstr to find the first occurrence of [football]")
-         char *p = strstr(str, "football");
+     WHEN("Lispy evaluates the question")
+         int result = eval(expr);
      WHEN_END
 
-     THEN("We should get the string: [football player]")
-         SHOULD_STR_EQUAL(p, "football player");
+     THEN("We should get the correct answer")
+         SHOULD_INT_EQUAL(result, 42);
      THEN_END
  SCENARIO_END
 FEATURE_END
@@ -27,5 +28,5 @@ int main() {
        {feature_idx(1)},
     };
 
-    return cbehave_runner("Strstr Features:", strstr_features);
+    return cbehave_runner("Lispy Features:", strstr_features);
 }

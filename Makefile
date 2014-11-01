@@ -2,11 +2,11 @@ CC=gcc
 CFLAGS=-I.
 LIBS=-lcbehave
 
-lispy: lispy.o
-	$(CC) -o lispy lispy.o $(CFLAGS) $(LIBS)
+lispy: lispy.h lispy.o main.o
+	$(CC) -o lispy main.o lispy.o $(CFLAGS) $(LIBS)
 
-test: test.o
-	$(CC) -o test test.o $(CFLAGS) $(LIBS)
+test: test.o lispy.o
+	$(CC) -o test test.o lispy.o $(CFLAGS) $(LIBS)
 
 testrun: test
 	make test && ./test
