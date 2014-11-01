@@ -14,11 +14,12 @@ FEATURE(1, "Expression evaluation")
      GIVEN_END
 
      WHEN("Lispy evaluates the question")
-         int result = eval(expr);
+         lval* result = eval(expr);
      WHEN_END
 
      THEN("We should get the correct answer")
-         SHOULD_INT_EQUAL(result, 42);
+         SHOULD_INT_EQUAL(result->num, 42);
+         free_lval(result);
      THEN_END
  SCENARIO_END
 FEATURE_END

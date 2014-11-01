@@ -13,9 +13,11 @@ int main(int argc, char** argv) {
     char* input = readline("lispy>");
     add_history(input);
 
-    int result = eval(input);
+    lval* result = eval(input);
 
-    printf("=> %d\n", result);
+    printf("=> %d\n", result->num);
+
+    free_lval(result);
     free(input);
   }
 
