@@ -1,10 +1,22 @@
 #include <stdio.h>
+#include <editline/readline.h>
+#include <editline/history.h>
 
 #include "lispy.h"
 
 int main(int argc, char** argv) {
+  puts("Lispy version 0.0.1");
+  puts("Press Ctrl+C to exit");
 
-  printf("Hello %d!\n", eval("world"));
+  while(1) {
+    char* input = readline("lispy>");
+    add_history(input);
+
+    int result = eval(input);
+
+    printf("=> %d\n", result);
+  }
+
   return 0;
 }
 

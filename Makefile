@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-I.
-LIBS=-lcbehave
+LIBS=-lcbehave -ledit
 
 lispy: lispy.h lispy.o main.o
 	$(CC) -o lispy main.o lispy.o $(CFLAGS) $(LIBS)
