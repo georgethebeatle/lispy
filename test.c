@@ -7,17 +7,17 @@
 
 
 FEATURE(1, "Expression evaluation")
-  SCENARIO("Lispy can answer the ultimate question")
+  SCENARIO("Lispy can evaluate a positive number")
 
-     GIVEN("The ultimate question")
-         char *expr = "What is the Ultimate Answer of Life, The Universe and Everything?";
+     GIVEN("A positive number")
+         char *expr = "42";
      GIVEN_END
 
-     WHEN("Lispy evaluates the question")
+     WHEN("Lispy evaluates the number")
          lval* result = eval(expr);
      WHEN_END
 
-     THEN("We should get the correct answer")
+     THEN("We should get the correct number")
          SHOULD_INT_EQUAL(result->num, 42);
          free_lval(result);
      THEN_END
@@ -25,9 +25,14 @@ FEATURE(1, "Expression evaluation")
 FEATURE_END
 
 int main() {
-    cbehave_feature strstr_features[] = {
-       {feature_idx(1)},
-    };
+  init_grammar();
 
-    return cbehave_runner("Lispy Features:", strstr_features);
+  cbehave_feature strstr_features[] = {
+    {feature_idx(1)},
+  };
+
+  int success = cbehave_runner("Lispy Features:", strstr_features);
+
+  free_grammar();
+  return success;
 }
