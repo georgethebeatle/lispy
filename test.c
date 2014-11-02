@@ -5,22 +5,77 @@
 #include "cbehave.h"
 #include "lispy.h"
 
-
 FEATURE(1, "Expression evaluation")
-  SCENARIO("Lispy can evaluate a positive number")
+  SCENARIO("It can evaluate a positive number")
 
      GIVEN("A positive number")
          char *expr = "42";
      GIVEN_END
 
-     WHEN("Lispy evaluates the number")
+     WHEN("It evaluates the number")
          lval* result = eval(expr);
      WHEN_END
 
-     THEN("We should get the correct number")
+     THEN("We should get a number value")
+         SHOULD_INT_EQUAL(result->type, LVAL_NUM);
+     THEN_END
+
+     THEN("And it should be correct")
          SHOULD_INT_EQUAL(result->num, 42);
          free_lval(result);
      THEN_END
+ SCENARIO_END
+
+ SCENARIO("It can evaluate a negative number")
+   GIVEN("A negative number")
+     char* expr = "-5";
+   GIVEN_END
+
+   WHEN("It evaluates the expression")
+     lval* result = eval(expr);
+   WHEN_END
+
+   THEN("We should get a number value")
+     SHOULD_INT_EQUAL(result->type, LVAL_NUM);
+   THEN_END
+
+   THEN("And it should be correct")
+     SHOULD_INT_EQUAL(result->num, -5);
+     free_lval(result);
+   THEN_END
+ SCENARIO_END
+
+ SCENARIO("It can sum numbers")
+   GIVEN("A valid sum expression")
+     char* expr = "(+ 2 -3 4)";
+   GIVEN_END
+
+   WHEN("It evaluates the expression")
+     lval* result = eval(expr);
+   WHEN_END
+
+   THEN("We should get a number value")
+     SHOULD_INT_EQUAL(result->type, LVAL_NUM);
+   THEN_END
+
+   THEN("And it should be the correct sum")
+     SHOULD_INT_EQUAL(result->num, 3);
+     free_lval(result);
+   THEN_END
+ SCENARIO_END
+
+ SCENARIO("It returns error on unknown operator")
+   GIVEN("A valid expression with unknown operator")
+     char* expr = "(^ 1 2)";
+   GIVEN_END
+
+   WHEN("It evaluates the expression")
+     lval* result = eval(expr);
+   WHEN_END
+
+   THEN("We should get an error")
+     SHOULD_INT_EQUAL(result->type, LVAL_ERR);
+   THEN_END
  SCENARIO_END
 FEATURE_END
 

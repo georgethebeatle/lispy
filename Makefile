@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I.
+CFLAGS=-std=c99 -I.
 LIBS=-lcbehave -ledit -lm
 
 all: lispy
@@ -19,4 +19,4 @@ testrun: test
 .PHONY: clean
 
 clean:
-	rm -f  *.o test lispy
+	rm -f  *.o *.out test lispy

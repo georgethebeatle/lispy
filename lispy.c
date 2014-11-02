@@ -24,11 +24,34 @@ void free_grammar() {
   mpc_cleanup(4, Number, Operator, Expr, Lispy);
 }
 
+int eval_op(int x, char* operator, int y) {
+  if (strcmp(operator, "+") == 0) { return x + y; }
+  if (strcmp(operator, "-") == 0) { return x - y; }
+  if (strcmp(operator, "*") == 0) { return x * y; }
+  if (strcmp(operator, "/") == 0) { return x / y; }
+  return 0;
+}
+
 int evaluate(mpc_ast_t* tree) {
   if(strstr(tree->tag, "number")) {
     return atoi(tree->contents);
   }
-  return 42;
+
+  mpc_ast_t* first_child = tree->children[1];
+
+  if (strstr(first_child->tag, "operator")) {
+    char* operator = first_child->contents;
+    mpc_ast_t* first_arg = tree->children[2];
+    int res = evaluate(first_arg);
+
+    for(int i=3; i < tree->children_num - 1; i++) {
+      res = eval_op(res, operator, evaluate(tree->children[i]));
+    }
+
+    return res;
+  }
+
+  return evaluate(first_child);
 }
 
 lval* eval(char* input) {
@@ -76,10 +99,10 @@ void free_lval(lval* val) {
 void lval_print(lval v) {
   switch(v.type) {
     case LVAL_NUM:
-      printf("=>%d\n", v.num);
+      printf("=> %d\n", v.num);
       break;
     case LVAL_ERR:
-      printf("=>%s\n", v.err);
+      printf("%s\n", v.err);
       break;
   }
 }
