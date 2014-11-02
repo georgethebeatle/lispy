@@ -24,20 +24,26 @@ void free_grammar() {
   mpc_cleanup(4, Number, Operator, Expr, Lispy);
 }
 
+int evaluate(mpc_ast_t* tree) {
+  if(strstr(tree->tag, "number")) {
+    return atoi(tree->contents);
+  }
+  return 42;
+}
+
 lval* eval(char* input) {
   lval* eval_result = NULL;
 
   mpc_result_t res;
   if (mpc_parse("<stdin>", input, Lispy, &res)) {
-    // TODO: use res.output to actually evaluate the epression
-    eval_result = lval_num(42);
+    int eval_res = evaluate(res.output);
+    eval_result = lval_num(eval_res);
+
     mpc_ast_delete(res.output);
   } else {
-    mpc_err_print(res.error);
-    // TODO: create error struct with message
-    // Use: void mpc_err_print_to(mpc_err_t *e, FILE *f);
-    // Open string stream for writing - see: http://www.gnu.org/software/libc/manual/html_node/String-Streams.html
-    eval_result = lval_err("some error occurred");
+    char* error_message = mpc_err_string(res.error);
+    eval_result = lval_err(error_message);
+    free(error_message);
     mpc_err_delete(res.error);
   }
 
@@ -55,7 +61,7 @@ lval* lval_num(int num) {
 lval* lval_err(char* err) {
   lval* val = (lval*) malloc(sizeof(lval));
   val->type = LVAL_ERR;
-  val->err = (char*) malloc(sizeof(err));
+  val->err = (char*) malloc(strlen(err) * sizeof(char));
   strcpy(val->err, err);
   return val;
 }
