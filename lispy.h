@@ -19,13 +19,11 @@ mpc_parser_t* Lispy;
 void init_grammar();
 void free_grammar();
 
-void init_grammar();
-
 lval* eval(char* input);
 
 lval* lval_num(int num);
-void free_lval(lval* val);
 lval* lval_err(char* err);
+void free_lval(lval* val);
 void lval_print(lval v);
 
 #endif

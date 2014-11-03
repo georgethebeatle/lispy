@@ -84,7 +84,7 @@ lval* lval_num(int num) {
 lval* lval_err(char* err) {
   lval* val = (lval*) malloc(sizeof(lval));
   val->type = LVAL_ERR;
-  val->err = (char*) malloc(strlen(err) * sizeof(char));
+  val->err = (char*) malloc(strlen(err) + 1);
   strcpy(val->err, err);
   return val;
 }
